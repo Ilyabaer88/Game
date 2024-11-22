@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstdlib> // Для функции rand()
+#include <ctime>   // Для функции time()
+
+using namespace std;
+
+// Функция для отображения выбора компьютера и игрока
+string getChoiceName(int choice) {
+    switch (choice) {
+        case 1: return "Камень";
+        case 2: return "Ножницы";
+        case 3: return "Бумага";
+        default: return "Неизвестно";
+    }
+}
+
+// Функция для определения победителя
+void determineWinner(int playerChoice, int computerChoice) {
+    // Печатаем выборы игроков
+    cout << "Ваш выбор: " << getChoiceName(playerChoice) << endl;
+    cout << "Выбор компьютера: " << getChoiceName(computerChoice) << endl;
+
+    // Определяем победителя по правилам игры
+    if (playerChoice == computerChoice) {
+        cout << "Ничья!" << endl;
+    } else if ((playerChoice == 1 && computerChoice == 2) || // Камень > Ножницы
+               (playerChoice == 2 && computerChoice == 3) || // Ножницы > Бумага
+               (playerChoice == 3 && computerChoice == 1)) { // Бумага > Камень
+        cout << "Вы выиграли!" << endl;
+    } else {
+        cout << "Компьютер выиграл!" << endl;
+    }
+}
+
+int main() {
+    // Инициализируем генератор случайных чисел
+    srand(static_cast<unsigned int>(time(0)));
+
+    int playerChoice;
+    bool playAgain = true;
+    char userResponse;
+
+    cout << "Добро пожаловать в игру 'Камень, ножницы, бумага'!" << endl;
+
+    while (playAgain) {
+        // Выбор игрока
+        cout << "Выберите: (1) Камень, (2) Ножницы, (3) Бумага: ";
+        cin >> playerChoice;
+
+        // Проверяем, введено ли корректное значение
+        if (playerChoice < 1 || playerChoice > 3) {
+            cout << "Некорректный ввод. Попробуйте еще раз." << endl;
+            continue;
+        }
+
+        // Выбор компьютера случайным образом
+        int computerChoice = rand() % 3 + 1;
+
+        // Определение победителя
+        determineWinner(playerChoice, computerChoice);
+
+        // Спрашиваем, хочет ли игрок сыграть еще раз
+        cout << "Хотите сыграть снова? (y/n): ";
+        cin >> userResponse;
+        playAgain = (userResponse == 'y' || userResponse == 'Y');
+    }
+
+    cout << "Спасибо за игру!" << endl;
+    return 0;
+}
